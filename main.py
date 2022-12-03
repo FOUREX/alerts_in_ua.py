@@ -1,16 +1,19 @@
-# This is a sample Python script.
+class Active:
+    def __init__(self, name: str, place_type: str, started_at: ...):
+        self.name = name
+        self.place_type = place_type
+        self.started_at = started_at
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+    def __repr__(self):
+        return f"name: {self.name}, type: {self.place_type}, started_at: {self.started_at}"
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+class Client:
+    def __init__(self, token: str):
+        self.token = token
 
+    async def get_active(self) -> list[Active | None]:
+        ...
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    async def is_active(self, name: str):
+        ...
