@@ -1,4 +1,5 @@
 import requests
+from time import time
 
 
 class Location:
@@ -36,53 +37,74 @@ class Location:
                f"calculated: {self.calculated})"
 
 
+class LocationList(list):
+    def __iter__(self):
+        return super(LocationList, self).__iter__()
+
+    def append(self, __location: Location) -> None:
+        ...
+
+
 class Client:
     def __init__(self, token: str):
         self.token = token
 
+        self.active_alerts = []
+        self.count_requests_per_minute = 0
+        self.last_request_time = 0
+
     def get_active(self) -> list[Location]:
         response = requests.get(f"https://dev-api.alerts.in.ua/v1/alerts/active.json?token={self.token}")
 
+        def get_alerts():
+            if self.count_requests_per_minute == 3:
+                delta_time = time() - self.last_request_time
+
+                if delta_time > ...:  # delta time > 1 minute
+                    self.count_requests_per_minute = 0
+
+            self.last_request_time = time()
+            self.count_requests_per_minute += 1
+
+            data = response.json()
+            alerts = data["alerts"]
+
+            for alert in alerts:
+                location_id = alert["id"]
+                location_title = alert["location_title"]
+                location_type = alert["location_type"]
+                started_at = alert["started_at"]
+                finished_at = alert["finished_at"]
+                updated_at = alert["updated_at"]
+                alert_type = alert["alert_type"]
+                location_uid = alert["location_uid"]
+                location_oblast = alert["location_oblast"]
+                location_raion = alert["location_raion"]
+                notes = alert["notes"]
+                calculated = alert["calculated"]
+
+                location = Location(
+                    location_id,
+                    location_title,
+                    location_type,
+                    started_at,
+                    finished_at,
+                    updated_at,
+                    alert_type,
+                    location_uid,
+                    location_oblast,
+                    location_raion,
+                    notes,
+                    calculated
+                )
+
+                self.active_alerts.append(location)
+
         match response.status_code:
             case 200:
-                data = response.json()
-                alerts = data["alerts"]
-                active = []
-
-                for alert in alerts:
-                    location_id = alert["id"]
-                    location_title = alert["location_title"]
-                    location_type = alert["location_type"]
-                    started_at = alert["started_at"]
-                    finished_at = alert["finished_at"]
-                    updated_at = alert["updated_at"]
-                    alert_type = alert["alert_type"]
-                    location_uid = alert["location_uid"]
-                    location_oblast = alert["location_oblast"]
-                    location_raion = alert["location_raion"]
-                    notes = alert["notes"]
-                    calculated = alert["calculated"]
-
-                    location = Location(
-                        location_id,
-                        location_title,
-                        location_type,
-                        started_at,
-                        finished_at,
-                        updated_at,
-                        alert_type,
-                        location_uid,
-                        location_oblast,
-                        location_raion,
-                        notes,
-                        calculated
-                    )
-
-                    active.append(location)
-
-                return active
+                get_alerts()
+                return self.active_alerts
             case 304:
                 ...
             case 401, 429:
-                message = response.json()["message"]
-                raise message
+                raise response.json()["message"]
