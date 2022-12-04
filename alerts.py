@@ -1,4 +1,5 @@
 import requests
+
 from time import time
 
 
@@ -38,6 +39,10 @@ class Location:
 
 
 class LocationList(list):
+    def __init__(self, meta: ...):
+        super(LocationList, self).__init__()
+        self.meta = meta
+
     def __iter__(self):
         return super(LocationList, self).__iter__()
 
