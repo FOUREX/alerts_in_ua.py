@@ -1,60 +1,9 @@
 import requests
+from pprint import pprint
 
-
-class Location:
-    def __init__(self,
-                 id: int,
-                 location_title: str,
-                 location_type: str,
-                 started_at: str,
-                 finished_at: str,
-                 updated_at: str,
-                 alert_type: str,
-                 location_uid: str,
-                 location_oblast: str,
-                 location_raion: str,
-                 notes: str,
-                 calculated: bool):
-        self.id = id
-        self.location_title = location_title
-        self.location_type = location_type
-        self.started_at = started_at
-        self.finished_at = finished_at
-        self.updated_at = updated_at
-        self.alert_type = alert_type
-        self.location_uid = location_uid
-        self.location_oblast = location_oblast
-        self.location_raion = location_raion
-        self.notes = notes
-        self.calculated = calculated
-
-    def __repr__(self):
-        return f"Location(id: {self.id}, location_title: {self.location_title}, location_type: {self.location_type}, " \
-               f"started_at: {self.started_at}, finished_at: {self.finished_at}, updated_at: {self.updated_at}, " \
-               f"alert_type: {self.alert_type}, location_uid: {self.location_uid}, " \
-               f"location_oblast: {self.location_oblast}, location_raion: {self.location_raion}, " \
-               f"notes: {self.notes}, calculated: {self.calculated})"
-
-
-class Locations(list):
-    def __init__(self, *__locations: Location, disclaimer: str, last_updated_at: str):
-        super(Locations, self).__init__(__locations)
-
-        self.disclaimer = disclaimer
-        self.last_updated_at = last_updated_at
-        self.type = "full"  # Ну потому что v1
-
-    def append(self, __location: Location) -> None:
-        super(Locations, self).append(__location)
-
-    def filter(self, **filters) -> list[Location]:
-        def location_filter(location: Location):
-            for _filter in filters:
-                if getattr(location, _filter) != filters[_filter]:
-                    return False
-            return True
-
-        return list(filter(location_filter, self))
+from location import Location
+from locations import Locations
+from exceptions import InvalidToken, TooManyRequests, UnknownError
 
 
 class AlertsClient:
@@ -64,32 +13,30 @@ class AlertsClient:
         self.__url = f"https://{'dev-' if dev else ''}api.alerts.in.ua/v1/alerts/active.json"
         self.__headers = {"Authorization": f"Bearer {self.__token}"}
 
-        self.locations = ...
-        self.requests_per_minute = 0
-        self.timer = 0
+        self.__locations = ...
 
     def get_active(self) -> Locations:
         response = requests.get(url=self.__url, headers=self.__headers)
-
-        match response.status_code:
-            case 200:  # Успішний запит
-                pass
-            case 304:  # Дані не було змінено
-                pass
-            case 401:  # Не вказаний, неправильний, відкликаний або прострочений API token
-                raise "API token required. Please contact api@alerts.in.ua for details."
-            case 429:  # Перевищено ліміт запитів у хвилину
-                raise "API Reach Limit. You should call API no more than 3-4 times per minute"
-
         data = response.json()
 
-        if "message" in data:
-            raise Exception(data["message"])
+        match response.status_code:
+            case 200:
+                pass
+            case 304:
+                return self.__locations
+            case 401:
+                raise InvalidToken("API token required. Please contact api@alerts.in.ua for details.")
+            case 429:
+                raise TooManyRequests("API Reach Limit. You should call API no more than 3-4 times per minute")
+            case _:
+                if "message" not in data:
+                    raise UnknownError("Unknown error. Please contact the developer. Telegram: @FOUREX_dot_py")
+                raise UnknownError(data["message"])
 
         _alerts = data["alerts"]
         _meta = data["meta"]
 
-        self.locations = Locations(disclaimer="disclaimer", last_updated_at=_meta["last_updated_at"])
+        self.__locations = Locations(disclaimer="disclaimer", last_updated_at=_meta["last_updated_at"])
 
         for alert in _alerts:
             location_id = alert["id"]
@@ -122,10 +69,6 @@ class AlertsClient:
                 notes,
                 calculated,
             )
-            self.locations.append(location)
+            self.__locations.append(location)
 
-        return self.locations
-
-
-alerts = AlertsClient("04fb0e20d084953e768100bbcfec463b81b1191aab2203")  # 04fb0e20d084953e768100bbcfec463b81b1191aab2203
-locations = alerts.get_active()
+        return self.__locations
