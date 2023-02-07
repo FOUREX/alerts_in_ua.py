@@ -1,12 +1,11 @@
 import requests
-from pprint import pprint
 
 from location import Location
 from locations import Locations
 from exceptions import InvalidToken, TooManyRequests, UnknownError
 
 
-class AlertsClient:
+class Client:
     def __init__(self, token: str, dev: bool = False):
         self.__token = token
 
