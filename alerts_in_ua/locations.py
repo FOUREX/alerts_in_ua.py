@@ -1,4 +1,4 @@
-from alerts.location import Location
+from alerts_in_ua.location import Location
 
 
 class Locations(list):

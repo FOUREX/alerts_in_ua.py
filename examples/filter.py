@@ -1,5 +1,5 @@
 from pprint import pprint
-from alerts.alerts_client import AlertsClient
+from alerts_in_ua.alerts_client import AlertsClient
 
 
 alerts_client = AlertsClient("token")

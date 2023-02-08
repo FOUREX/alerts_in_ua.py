@@ -1,6 +1,6 @@
 import asyncio
 
-from alerts.async_alerts_client import AsyncAlertsClient
+from alerts_in_ua.async_alerts_client import AsyncAlertsClient
 
 
 alerts_client = AsyncAlertsClient("token")  # Ініціалізуємо клієнт

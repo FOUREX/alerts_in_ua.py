@@ -1,14 +1,14 @@
 import aiohttp
 
-from alerts.location import Location
-from alerts.locations import Locations
-from alerts.exceptions import InvalidToken, TooManyRequests, UnknownError
+from alerts_in_ua.location import Location
+from alerts_in_ua.locations import Locations
+from alerts_in_ua.exceptions import InvalidToken, TooManyRequests, UnknownError
 
 
 class AsyncAlertsClient:
     def __init__(self, token: str, dev: bool = False):
         """
-        Асинхронний клієнт, рекомендовано використовувати для ботів. Дані беруться з сайту "alerts.in.ua"
+        Асинхронний клієнт, рекомендовано використовувати для ботів. Дані беруться з сайту "alerts_in_ua.in.ua"
 
         :param token: Токен доступу
         :param dev: Використання тестового сервера
@@ -16,7 +16,7 @@ class AsyncAlertsClient:
 
         self.__token = token
 
-        self.__url = f"https://{'dev-' if dev else ''}api.alerts.in.ua/v1/alerts/active.json"
+        self.__url = f"https://{'dev-' if dev else ''}api.alerts_in_ua.in.ua/v1/alerts_in_ua/active.json"
         self.__headers = {"Authorization": f"Bearer {self.__token}"}
 
         self.__locations = ...
@@ -40,7 +40,7 @@ class AsyncAlertsClient:
                     case 304:
                         return self.__locations
                     case 401:
-                        raise InvalidToken("API token required. Please contact api@alerts.in.ua for details.")
+                        raise InvalidToken("API token required. Please contact api@alerts_in_ua.in.ua for details.")
                     case 429:
                         raise TooManyRequests("API Reach Limit. You should call API no more than 3-4 times per minute")
                     case _:
@@ -48,7 +48,7 @@ class AsyncAlertsClient:
                             raise UnknownError("Unknown error. Please contact the developer. Telegram: @FOUREX_dot_py")
                         raise UnknownError(data["message"])
 
-                _alerts = data["alerts"]
+                _alerts = data["alerts_in_ua"]
                 _meta = data["meta"]
 
                 self.__locations = Locations(disclaimer=data["disclaimer"], last_updated_at=_meta["last_updated_at"])

@@ -1,5 +1,5 @@
 [build-system]
-requires = ["aiohttp>=3.8.3", "requests>=2.28.1"]
+requires = ["setuptools", "aiohttp>=3.8.3", "requests>=2.28.1"]
 build-backend = "setuptools.build_meta"
 
 [project]

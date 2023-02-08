@@ -1,4 +1,4 @@
-from alerts.alerts_client import AlertsClient  # Імпортуємо клієнт
+from alerts_in_ua.alerts_client import AlertsClient  # Імпортуємо клієнт
 
 
 alerts_client = AlertsClient("token")  # Ініціалізуємо клієнт

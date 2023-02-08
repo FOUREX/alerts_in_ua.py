@@ -5,9 +5,9 @@
 звертайтеся до розробника!** Telegram: [@FOUREX_dot_py](https://t.me/FOUREX_dot_py).
 
 ## Приклад використання:
-```python
-from alerts.alerts_client import AlertsClient  # Імпортуємо клієнт
 
+```python
+from alerts_in_ua.alerts_client import AlertsClient  # Імпортуємо клієнт
 
 alerts_client = AlertsClient("token")  # Ініціалізуємо клієнт
 
@@ -29,11 +29,11 @@ if __name__ == "__main__":
 
 ## Приклад використання асинхронного клієнта:
 Рекомендовано використовувати для ботів.
+
 ```python
 import asyncio
 
-from alerts.async_alerts_client import AsyncAlertsClient
-
+from alerts_in_ua.async_alerts_client import AsyncAlertsClient
 
 alerts_client = AsyncAlertsClient("token")  # Ініціалізуємо клієнт
 
