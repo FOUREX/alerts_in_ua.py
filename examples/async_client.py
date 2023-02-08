@@ -10,9 +10,9 @@ async def main():
     locations = await alerts_client.get_active()  # Отримуємо список місць з тревогою
 
     # Фільтруємо список місць залишаючи місця з ПОВІТРЯНОЮ тревогою
-    locations = locations.filter(alert_type="air_raid")
+    air_raid_locations = locations.filter(alert_type="air_raid")
 
-    for location in locations:
+    for location in air_raid_locations:
         # Виводимо назву та час початку тревоги кожного місця зі списку
         print(location.location_title, location.started_at)
 

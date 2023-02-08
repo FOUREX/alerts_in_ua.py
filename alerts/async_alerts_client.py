@@ -51,7 +51,6 @@ class AsyncAlertsClient:
                 _alerts = data["alerts"]
                 _meta = data["meta"]
 
-                # TODO: Disclaimer
                 self.__locations = Locations(disclaimer=data["disclaimer"], last_updated_at=_meta["last_updated_at"])
 
                 for alert in _alerts:
