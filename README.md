@@ -1,6 +1,6 @@
 # Alerts_in_ua.py
 
-Бібліотека для користування API сайту "alerts.in.ua".
+Бібліотека для користування API сайту [alerts.in.ua](https://alerts.in.ua).
 **Бібліотека досі в розробці, якщо ви знайшли помилку,
 звертайтеся до розробника!** Telegram: [@FOUREX_dot_py](https://t.me/FOUREX_dot_py).
 
