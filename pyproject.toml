@@ -18,5 +18,5 @@ classifiers = [
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/FOUREX/alerts_in_ua_dot_py"
+"Homepage" = "https://github.com/FOUREX/alerts_in_ua.py"
 "Telegram" = "https://t.me/Alerts_in_ua_dot_py"
