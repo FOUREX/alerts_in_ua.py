@@ -2,7 +2,7 @@
 
 Бібліотека для користування API сайту "alerts.in.ua".
 **Бібліотека досі в розробці, якщо ви знайшли помилку,
-звертайтеся до розробника!** Telegram: [@FOUREX_dot_py](https://t.me/FOUREX_dot_py).
+звертайтеся до розробника!** Telegram: [@FOUREX_dot_py](https://t.me/FOUREX_dot_py)
 
 ## Приклад використання:
 ```python
