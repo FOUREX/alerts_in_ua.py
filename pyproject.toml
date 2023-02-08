@@ -1,0 +1,17 @@
+[project]
+name = "Alerts_in_ua.py"
+version = "1.0"
+authors = [
+  { name="FOUREX", email="Foxtrotserega@gmail.com" },
+]
+description = "Бібліотека для користування API сайту \"alerts.in.ua\""
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3.10",
+    "License :: OSI Approved :: MIT License"
+]
+
+[project.urls]
+"Homepage" = "https://github.com/pypa/sampleproject"
+"Telegram" = "https://t.me/Alerts_in_ua_dot_py"

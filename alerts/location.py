@@ -12,6 +12,10 @@ class Location:
                  location_raion: str,
                  notes: str,
                  calculated: bool):
+        """
+        Об'єкт місця з тревогою для більш зручного доступу до його інформації
+        """
+
         self.id = id
         self.location_title = location_title
         self.location_type = location_type

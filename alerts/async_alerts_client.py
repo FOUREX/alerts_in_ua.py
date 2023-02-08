@@ -1,12 +1,19 @@
 import aiohttp
 
-from location import Location
-from locations import Locations
-from exceptions import InvalidToken, TooManyRequests, UnknownError
+from alerts.location import Location
+from alerts.locations import Locations
+from alerts.exceptions import InvalidToken, TooManyRequests, UnknownError
 
 
-class AsyncClient:
+class AsyncAlertsClient:
     def __init__(self, token: str, dev: bool = False):
+        """
+        Асинхронний клієнт, рекомендовано використовувати для ботів. Дані беруться з сайту "alerts.in.ua"
+
+        :param token: Токен доступу
+        :param dev: Використання тестового сервера
+        """
+
         self.__token = token
 
         self.__url = f"https://{'dev-' if dev else ''}api.alerts.in.ua/v1/alerts/active.json"
@@ -15,6 +22,14 @@ class AsyncClient:
         self.__locations = ...
 
     async def get_active(self) -> Locations:
+        """
+        Повертає список місць з тревогою
+
+        :raise InvalidToken: Не дійсний токен
+        :raise TooManyRequests: Забагато запитів
+        :raise UnknownError: Невідома помилка
+        """
+
         async with aiohttp.ClientSession() as session:
             async with session.get(url=self.__url, headers=self.__headers) as response:
                 data = await response.json()
@@ -36,7 +51,8 @@ class AsyncClient:
                 _alerts = data["alerts"]
                 _meta = data["meta"]
 
-                self.__locations = Locations(disclaimer="disclaimer", last_updated_at=_meta["last_updated_at"])
+                # TODO: Disclaimer
+                self.__locations = Locations(disclaimer=data["disclaimer"], last_updated_at=_meta["last_updated_at"])
 
                 for alert in _alerts:
                     location_id = alert["id"]
