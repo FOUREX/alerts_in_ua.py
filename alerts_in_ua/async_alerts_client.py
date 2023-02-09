@@ -16,7 +16,7 @@ class AsyncAlertsClient:
 
         self.__token = token
 
-        self.__url = f"https://{'dev-' if dev else ''}api.alerts_in_ua.in.ua/v1/alerts_in_ua/active.json"
+        self.__url = f"https://{'dev-' if dev else ''}api.alerts.in.ua/v1/alerts/active.json"
         self.__headers = {"Authorization": f"Bearer {self.__token}"}
 
         self.__locations = ...
@@ -48,7 +48,7 @@ class AsyncAlertsClient:
                             raise UnknownError("Unknown error. Please contact the developer. Telegram: @FOUREX_dot_py")
                         raise UnknownError(data["message"])
 
-                _alerts = data["alerts_in_ua"]
+                _alerts = data["alerts"]
                 _meta = data["meta"]
 
                 self.__locations = Locations(disclaimer=data["disclaimer"], last_updated_at=_meta["last_updated_at"])
