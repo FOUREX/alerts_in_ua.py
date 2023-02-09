@@ -1,5 +1,7 @@
 # Alerts_in_ua.py
 
+⚠️Розробники сайту [alerts.in.ua](https://alerts.in.ua) випустили [офіційну бібліотеку](https://github.com/alerts-ua/alerts-in-ua-py) на день раніше мене, тому я не знаю, чи варто мені продовжувати роботу над цією бібліотекою.⚠️
+
 Бібліотека для користування API сайту [alerts.in.ua](https://alerts.in.ua).
 **Бібліотека досі в розробці, якщо ви знайшли помилку,
 звертайтеся до розробника!** Telegram: [@FOUREX_dot_py](https://t.me/FOUREX_dot_py).
