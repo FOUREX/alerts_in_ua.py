@@ -1,4 +1,4 @@
-__version__ = "1.1"
+__version__ = "1.2"
 
 from alerts_in_ua.alerts_client import AlertsClient as AlertsClient
 from alerts_in_ua.async_alerts_client import AsyncAlertsClient as AsyncAlertsClient
