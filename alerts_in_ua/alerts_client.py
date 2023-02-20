@@ -1,3 +1,5 @@
+from time import time
+
 import requests
 
 from alerts_in_ua.location import Location
@@ -6,20 +8,24 @@ from alerts_in_ua.exceptions import InvalidToken, TooManyRequests, UnknownError
 
 
 class AlertsClient:
-    def __init__(self, token: str, dev: bool = False):
+    MAX_REQUESTS_PER_MINUTE = 3
+
+    def __init__(self, token: str):
         """
         Клієнт. Дані беруться з сайту "alerts_in_ua.in.ua"
 
         :param token: Токен доступу
-        :param dev: Використання тестового сервера
         """
 
         self.__token = token
 
-        self.__url = f"https://{'dev-' if dev else ''}api.alerts.in.ua/v1/alerts/active.json"
+        self.__url = f"https://api.alerts.in.ua/v1/alerts/active.json"
         self.__headers = {"Authorization": f"Bearer {self.__token}"}
 
         self.__locations = ...
+
+        self.__timer = 0
+        self.__requests_per_minute = 0
 
     def get_active(self) -> Locations:
         """
@@ -30,6 +36,11 @@ class AlertsClient:
         :raise UnknownError: Невідома помилка
         """
 
+        delta_time_seconds = (time() - self.__timer) % 60
+
+        if self.__requests_per_minute >= 3 and delta_time < 60:
+            return self.__locations
+
         response = requests.get(url=self.__url, headers=self.__headers)
         data = response.json()
 
@@ -39,12 +50,16 @@ class AlertsClient:
             case 304:
                 return self.__locations
             case 401:
-                raise InvalidToken("API token required. Please contact api@alerts_in_ua.in.ua for details.")
+                raise InvalidToken("API token required. Please contact api@alerts_in_ua.in.ua for details")
             case 429:
                 raise TooManyRequests("API Reach Limit. You should call API no more than 3-4 times per minute")
             case _:
                 if "message" not in response.json():
-                    raise UnknownError("Unknown error. Please contact the developer. Telegram: @FOUREX_dot_py")
+                    raise UnknownError(
+                        "Невідома помилка. Будь ласка, зв'яжіться з розробником. "
+                        "Telegram: @FOUREX_dot_py, "
+                        "Email: Foxtrotserega@gmail.com"
+                    )
                 raise UnknownError(response.json()["message"])
 
         _alerts = data["alerts"]

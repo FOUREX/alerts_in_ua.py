@@ -6,17 +6,16 @@ from alerts_in_ua.exceptions import InvalidToken, TooManyRequests, UnknownError
 
 
 class AsyncAlertsClient:
-    def __init__(self, token: str, dev: bool = False):
+    def __init__(self, token: str):
         """
         Асинхронний клієнт, рекомендовано використовувати для ботів. Дані беруться з сайту "alerts_in_ua.in.ua"
 
         :param token: Токен доступу
-        :param dev: Використання тестового сервера
         """
 
         self.__token = token
 
-        self.__url = f"https://{'dev-' if dev else ''}api.alerts.in.ua/v1/alerts/active.json"
+        self.__url = f"https://api.alerts.in.ua/v1/alerts/active.json"
         self.__headers = {"Authorization": f"Bearer {self.__token}"}
 
         self.__locations = ...
