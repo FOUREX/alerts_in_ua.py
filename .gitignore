@@ -2,3 +2,4 @@
 venv
 test
 /yep.py
+dist
