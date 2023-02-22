@@ -1,7 +1,5 @@
 from setuptools import setup
 
-from alerts_in_ua import __version__
-
 
 with open("README.md", "r", encoding="utf-8") as file:
     long_description = file.read()
@@ -12,7 +10,7 @@ with open("requirements.txt", "r", encoding="utf-8") as file:
 
 setup(
     name="alerts_in_ua.py",
-    version=__version__,
+    version="",
     description="Бібліотека для використання API сайту alerts.in.ua",
     long_description=long_description,
     author='FOUREX, SladkayaDoza',
