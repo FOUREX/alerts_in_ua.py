@@ -4,8 +4,12 @@ from setuptools import setup
 with open("README.md", "r", encoding="utf-8") as file:
     long_description = file.read()
 
-with open("requirements.txt", "r", encoding="utf-8") as file:
-    requires = file.read().splitlines()
+requires = [
+    "aiohttp~=3.8.3",
+    "requests~=2.28.1",
+    "svglib~=1.5.1",
+    "reportlab~=3.6.12"
+]
 
 
 setup(
