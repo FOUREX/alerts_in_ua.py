@@ -16,7 +16,7 @@ Self = TypeVar("Self")
 
 class Locations(list):
     """
-    Список для місць з тревогою для більш зручної маніпуляції над ними
+    Список для місць з тривогою для більш зручної маніпуляції над ними
     """
 
     def __init__(self, *__locations: Location, disclaimer: str, last_updated_at: str) -> None:
@@ -109,7 +109,7 @@ class Locations(list):
 
     def render_map(self, map_style: MapStyle = MapStyle()) -> BytesIO:
         """
-        Рендер карти тревог в .png форматі
+        Рендер карти тривог в .png форматі
         """
 
         svg_ukraine_map = self.__build_map(map_style)

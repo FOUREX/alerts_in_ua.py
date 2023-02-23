@@ -16,13 +16,13 @@ alerts_client = AlertsClient("token")  # Ініціалізуємо клієнт
 
 
 def main():
-    locations = alerts_client.get_active()  # Отримуємо список місць з тревогою
+    locations = alerts_client.get_active()  # Отримуємо список місць з тривогою
 
-    # Фільтруємо список місць залишаючи місця з ПОВІТРЯНОЮ тревогою
+    # Фільтруємо список місць залишаючи місця з ПОВІТРЯНОЮ тривогою
     air_raid_locations = locations.filter(alert_type="air_raid")
 
     for location in air_raid_locations:
-        # Виводимо назву та час початку тревоги кожного місця зі списку
+        # Виводимо назву та час початку тривоги кожного місця зі списку
         print(location.location_title, location.started_at)
 
 
@@ -42,13 +42,13 @@ alerts_client = AsyncAlertsClient("token")  # Ініціалізуємо клі�
 
 
 async def main():
-    locations = await alerts_client.get_active()  # Отримуємо список місць з тревогою
+    locations = await alerts_client.get_active()  # Отримуємо список місць з тривогою
 
-    # Фільтруємо список місць залишаючи місця з ПОВІТРЯНОЮ тревогою
+    # Фільтруємо список місць залишаючи місця з ПОВІТРЯНОЮ тривогою
     air_raid_locations = locations.filter(alert_type="air_raid")
 
     for location in air_raid_locations:
-        # Виводимо назву та час початку тревоги кожного місця зі списку
+        # Виводимо назву та час початку тривоги кожного місця зі списку
         print(location.location_title, location.started_at)
 
 
@@ -57,7 +57,7 @@ if __name__ == "__main__":
     loop.run_until_complete(main())
 ```
 
-## Приклад використання рендера мапи тревог:
+## Приклад використання рендера мапи тривог:
 Для телеграм боту написаного з допомогою бібліотеки [aiogram](https://github.com/aiogram/aiogram)
 ```python
 from aiogram import Bot, Dispatcher, executor
@@ -77,7 +77,7 @@ alerts_client = AsyncAlertsClient("api_alerts_in_ua_token")
 async def yep(message: Message):
     locations = await alerts_client.get_active()
     alerts_map = locations.render_map()
-    message_text = "\n".join([title for title in locations.location_title])
+    message_text = "\n".join(locations.location_title)
 
     await message.reply_photo(alerts_map, message_text)
 
@@ -99,9 +99,9 @@ air_raid = locations.filter(alert_type="air_raid")
 oblast = locations.filter(location_type="oblast")
 air_raid_and_oblast = locations.filter(alert_type="air_raid", location_type="oblast")
 
-print(air_raid)  # Місця лише з повітряною тревогою
+print(air_raid)  # Місця лише з повітряною тривогою
 print(oblast)  # Лише області
-print(air_raid_and_oblast)  # Лише області з повітряною тревогою
+print(air_raid_and_oblast)  # Лише області з повітряною тривогою
 ```
 Спосіб 2
 ```python
@@ -115,9 +115,9 @@ air_raid = locations.filter(**air_raid_filter)
 oblast = locations.filter(**oblast_filter)
 air_raid_and_oblast = locations.filter(**air_raid_and_oblast_filter)
 
-print(air_raid)  # Місця лише з повітряною тревогою
+print(air_raid)  # Місця лише з повітряною тривогою
 print(oblast)  # Лише області
-print(air_raid_and_oblast)  # Лише області з повітряною тревогою
+print(air_raid_and_oblast)  # Лише області з повітряною тривогою
 ```
 
 ## Отримання значень атрибутів місць через список місць:

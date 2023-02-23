@@ -14,7 +14,7 @@ requires = [
 
 setup(
     name="alerts_in_ua.py",
-    version="1.2.5",
+    version="1.2.6",
     description="Бібліотека для використання API сайту alerts.in.ua",
     long_description=long_description,
     author='FOUREX, SladkayaDoza',

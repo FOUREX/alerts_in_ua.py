@@ -29,7 +29,7 @@ class AlertsClient:
 
     def get_active(self) -> Locations:
         """
-        Повертає список місць з тревогою
+        Повертає список місць з тривогою
 
         :raise InvalidToken: Не дійсний токен
         :raise TooManyRequests: Забагато запитів
