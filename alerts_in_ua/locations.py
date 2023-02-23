@@ -9,6 +9,8 @@ from alerts_in_ua.location import Location
 from alerts_in_ua.map_style import MapStyle
 
 
+DIRECTORY = "/".join(__file__.replace('\\', '/').split('/')[:-1])
+
 Self = TypeVar("Self")
 
 
@@ -42,7 +44,7 @@ class Locations(list):
     def __build_map(self, map_style: MapStyle) -> BytesIO:
         svg_ukraine_map = BytesIO()
 
-        with open("./alerts_in_ua/src/map/Ukraine simple.svg", "r", encoding="utf-8") as file:
+        with open(f"{DIRECTORY}/resources/map/Ukraine simple.svg", "r", encoding="utf-8") as file:
             svg_ukraine_map.write(bytes(file.read(), "utf-8"))
             svg_ukraine_map.seek(0)
 
