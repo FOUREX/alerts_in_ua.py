@@ -7,6 +7,12 @@
 Розробники сайту [alerts.in.ua](https://alerts.in.ua/) випустили
 [офіційну бібліотеку](https://github.com/alerts-ua/alerts-in-ua-py).
 
+## Встановлення
+
+```commandline
+pip install alerts-in-ua.py
+```
+
 ## Приклад використання:
 
 ```python
