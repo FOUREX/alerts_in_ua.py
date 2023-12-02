@@ -1,5 +1,4 @@
 from xml.etree import ElementTree
-from typing import TypeVar
 from io import BytesIO
 
 from svglib.svglib import svg2rlg
@@ -10,8 +9,6 @@ from alerts_in_ua.map_style import MapStyle
 
 
 DIRECTORY = "/".join(__file__.replace('\\', '/').split('/')[:-1])
-
-Self = TypeVar("Self")
 
 
 class Locations(list):
@@ -88,7 +85,7 @@ class Locations(list):
 
         return None
 
-    def filter(self, **filters) -> Self:
+    def filter(self, **filters) -> 'Locations':
         """
         Повертає список місць які підпадають під вказані фільтри
 
