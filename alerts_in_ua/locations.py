@@ -16,21 +16,44 @@ class Locations(list):
     Список для місць з тривогою для більш зручної маніпуляції над ними
     """
 
+    id: int
+    location_title: str
+    location_type: str
+    started_at: str
+    finished_at: str
+    updated_at: str
+    alert_type: str
+    location_uid: str
+    location_oblast: str
+    location_raion: str
+    notes: str
+    calculated: bool
+
     def __init__(self, *__locations: Location, disclaimer: str, last_updated_at: str) -> None:
         super(Locations, self).__init__(__locations)
 
         self.disclaimer = disclaimer
         self.last_updated_at = last_updated_at
-        self.type = "full"  # Ну тому що v1
+        self.type = "full"  # Ну тому, що v1
 
     def __getattr__(self, item) -> list:
+        """
+        Повертає список значень атрибутів кожної локації
+        """
+
         return [getattr(location, item) for location in self]
 
     def __contains__(self, item: str | int) -> bool:
-        if isinstance(item, int):
+        """
+        Перевіряє наявність локації за її UID (location_uid) або назвою (location_title)
+        """
+
+        if isinstance(item, str):
             return item in self.location_uid
-        else:
+        elif isinstance(item, int):
             return item in self.location_title
+        else:
+            return False
 
     def append(self, __location: Location) -> None:
         super(Locations, self).append(__location)
@@ -39,6 +62,12 @@ class Locations(list):
         super(Locations, self).remove(__location)
 
     def __build_map(self, map_style: MapStyle) -> BytesIO:
+        """"
+        Генерація svg мапи для подальшого рендеру в png формат
+
+        :param map_style:
+        """
+
         svg_ukraine_map = BytesIO()
 
         with open(f"{DIRECTORY}/resources/map/Ukraine simple.svg", "r", encoding="utf-8") as file:
