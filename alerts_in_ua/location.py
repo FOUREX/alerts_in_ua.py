@@ -1,6 +1,6 @@
 class Location:
     def __init__(self,
-                 id: int,
+                 _id: int,
                  location_title: str,
                  location_type: str,
                  started_at: str,
@@ -16,7 +16,7 @@ class Location:
         Об'єкт місця з тривогою для більш зручного доступу до його інформації
         """
 
-        self.id = id
+        self.id = _id
         self.location_title = location_title
         self.location_type = location_type
         self.started_at = started_at
