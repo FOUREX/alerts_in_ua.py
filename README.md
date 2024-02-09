@@ -2,14 +2,14 @@
 
 Бібліотека для користування API сайту [alerts.in.ua](https://alerts.in.ua).
 **Бібліотека досі в розробці, якщо ви знайшли помилку або у вас є ідея щодо бібліотеки,
-звертайтеся до розробника!** Telegram: [@FOUREX_dot_py](https://t.me/FOUREX_dot_py).
+вертайтесь до розробника!** Telegram: [@FOUREX_dot_py](https://t.me/FOUREX_dot_py).
 
 Розробники сайту [alerts.in.ua](https://alerts.in.ua/) випустили
 [офіційну бібліотеку](https://github.com/alerts-ua/alerts-in-ua-py).
 
 ## Встановлення
 
-```commandline
+```shell
 pip install alerts-in-ua.py
 ```
 
@@ -70,7 +70,6 @@ from aiogram import Bot, Dispatcher, executor
 from aiogram.types import Message
 
 from alerts_in_ua.async_alerts_client import AsyncAlertsClient
-from alerts_in_ua.location import Location
 
 
 bot = Bot("telegram_bot_token")
