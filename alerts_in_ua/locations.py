@@ -43,7 +43,7 @@ class Locations(list):
 
         return [getattr(location, item) for location in self]
 
-    def __contains__(self, item: str | int) -> bool:
+    def __contains__(self, item: int | str) -> bool:
         """
         Перевіряє наявність локації за її UID (location_uid) або назвою (location_title)
         """
@@ -114,11 +114,27 @@ class Locations(list):
 
         return None
 
-    def filter(self, **filters) -> 'Locations':
+    def filter(self, **filters: str | int | bool) -> 'Locations':
         """
-        Повертає список місць які підпадають під вказані фільтри
+        Повертає список місць які підпадають під вказані фільтри (фільтр=значення).
 
         :param filters: Фільтри
+        :type filters: dict[str, Union[str, int, bool]]
+        - id (int): Унікальний ідентифікатор запису
+        - location_title (str): Назва локації
+        - location_type (str): Тип локації
+        - started_at (str): Час початку тривоги
+        - finished_at (str): Час кінця тривоги
+        - updated_at (str): Час останнього оновлення запису в базі
+        - alert_type (str): Тип тривоги
+        - location_uid (str): Унікальний ідентифікатор локації
+        - location_oblast (str): Область локації
+        - location_raion (str): Район локації
+        - notes (str): Нотатки
+        - calculated (bool): Визначає чи час закінчення тривоги прогнозований, чи викорстаний реальний час закінчення.
+        - filters : Фільтри у вигляду словника (dict)
+
+        Детальніше на https://devs.alerts.in.ua/#modelalert
         """
 
         def location_filter(location: Location) -> bool:
