@@ -94,7 +94,7 @@ if __name__ == "__main__":
 
 Результат:
 
-![map_render_result.png](assets/map_render_result.png)
+![map_render_result.png](map_render_result.png)
 
 ## Використання фільтрів:
 Спосіб 1
