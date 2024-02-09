@@ -13,8 +13,8 @@ class BaseAlertsClient(ABC):
         """
         Базовий клієнт
 
-        :param token: Токен доступу
-        :param requests_per_minute_limit: Ліміт запитів на хвилину
+        :param token: Токен доступу.
+        :param requests_per_minute_limit: Ліміт запитів на хвилину.
         """
 
         self._token = token
@@ -23,8 +23,8 @@ class BaseAlertsClient(ABC):
         self._url = f"https://api.alerts.in.ua/v1/alerts/active.json"
         self._headers = {"Authorization": f"Bearer {self._token}", "If-Modified-Since": ""}
 
-        self._locations_json: dict = ...
-        self._locations: Locations = ...
+        self._locations_json: dict = {}
+        self._locations: Locations = Locations(disclaimer="No data", last_updated_at="No data")
         self._response_status_code: int = ...
 
         self._timer = time()
@@ -88,8 +88,8 @@ class BaseAlertsClient(ABC):
 
         :raise InvalidToken: Токен API відсутній, неправильний, відкликаний або прострочений.
         :raise Forbidden: Ваш IP адрес заблокований або API не доступне в вашій країні.
-        :raise TooManyRequests: Ліміт запитів на хвилину перевищено
-        :raise UnknownError: Невідома помилка
+        :raise TooManyRequests: Ліміт запитів на хвилину перевищено.
+        :raise UnknownError: Невідома помилка.
         """
 
         pass
@@ -103,8 +103,8 @@ class BaseAlertsClient(ABC):
 
         :raise InvalidToken: Токен API відсутній, неправильний, відкликаний або прострочений.
         :raise Forbidden: Ваш IP адрес заблокований або API не доступне в вашій країні.
-        :raise TooManyRequests: Ліміт запитів на хвилину перевищено
-        :raise UnknownError: Невідома помилка
+        :raise TooManyRequests: Ліміт запитів на хвилину перевищено.
+        :raise UnknownError: Невідома помилка.
         """
 
         pass
