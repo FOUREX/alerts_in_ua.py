@@ -1,88 +1,71 @@
+from abc import ABCMeta
+from time import time
+
 import aiohttp
 
-from alerts_in_ua.location import Location
-from alerts_in_ua.locations import Locations
-from alerts_in_ua.exceptions import InvalidToken, TooManyRequests, UnknownError
+from alerts_in_ua.base_alerts_client import BaseAlertsClient
+from alerts_in_ua.exceptions import NotAuthorized, Forbidden, TooManyRequests
 
 
-class AsyncAlertsClient:
-    def __init__(self, token: str):
+class AsyncAlertsClient(BaseAlertsClient, metaclass=ABCMeta):
+    def __init__(self, token: str, requests_per_minute_limit: int = BaseAlertsClient.SOFT_LIMIT):
         """
-        Асинхронний клієнт, рекомендовано використовувати для ботів. Дані беруться з сайту "alerts_in_ua.in.ua"
+        Клієнт. Дані беруться з сайту "alerts_in_ua.in.ua"
 
         :param token: Токен доступу
+        :param requests_per_minute_limit: Ліміт запитів на хвилину
         """
 
-        self.__token = token
+        super().__init__(token, requests_per_minute_limit)
 
-        self.__url = f"https://api.alerts.in.ua/v1/alerts/active.json"
-        self.__headers = {"Authorization": f"Bearer {self.__token}"}
-
-        self.__locations = ...
-
-    async def get_active(self) -> Locations:
-        """
-        Повертає список місць з тривогою
-
-        :raise InvalidToken: Не дійсний токен
-        :raise TooManyRequests: Забагато запитів
-        :raise UnknownError: Невідома помилка
-        """
-
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url=self.__url, headers=self.__headers) as response:
-                data = await response.json()
-
+    async def _make_request(self, force: bool):
+        async with aiohttp.ClientSession() as session:  # Шести поверховий пентхаус, лол
+            async with session.get(url=self._url, headers=self._headers) as response:
                 match response.status:
-                    case 200:
-                        pass
-                    case 304:
-                        return self.__locations
-                    case 401:
-                        raise InvalidToken("API token required. Please contact api@alerts_in_ua.in.ua for details.")
-                    case 429:
-                        raise TooManyRequests("API Reach Limit. You should call API no more than 3-4 times per minute")
-                    case _:
-                        if "message" not in data:
-                            raise UnknownError("Unknown error. Please contact the developer. Telegram: @FOUREX_dot_py")
-                        raise UnknownError(data["message"])
+                    case 200:  # Ok
+                        self._locations_json = await response.json()
+                        self._headers["If-Modified-Since"] = response.headers["last-modified"]
+                        self._response_status_code = 200
+                    case 304:  # Не змінено
+                        self._response_status_code = 304
+                    case 401:  # Не авторизовано
+                        raise NotAuthorized
+                    case 403:  # Заборонено
+                        raise Forbidden
+                    case 429:  # Забагато запитів
+                        raise TooManyRequests
 
-                _alerts = data["alerts"]
-                _meta = data["meta"]
+    async def get_active_json(self, force: bool = False):
+        if (time() - self._timer) > 60:
+            self._timer = time()
+            self._requests_per_minute = 0
 
-                self.__locations = Locations(disclaimer=data["disclaimer"], last_updated_at=_meta["last_updated_at"])
+        if self._requests_per_minute == BaseAlertsClient.HARD_LIMIT:
+            return self._locations_json
 
-                for alert in _alerts:
-                    location_id = alert["id"]
-                    location_title = alert["location_title"]
-                    location_type = alert["location_type"]
-                    started_at = alert["started_at"]
-                    finished_at = alert["finished_at"]
-                    updated_at = alert["updated_at"]
-                    alert_type = alert["alert_type"]
-                    location_uid = alert["location_uid"]
-                    location_oblast = alert["location_oblast"]
-                    location_raion = None
-                    notes = alert["notes"]
-                    calculated = alert["calculated"]
+        if self._requests_per_minute >= self._requests_per_minute_limit and not force:
+            return self._locations_json
 
-                    if "location_raion" in alert:
-                        location_raion = alert["location_raion"]
+        self._requests_per_minute += 1
 
-                    location = Location(
-                        location_id,
-                        location_title,
-                        location_type,
-                        started_at,
-                        finished_at,
-                        updated_at,
-                        alert_type,
-                        location_uid,
-                        location_oblast,
-                        location_raion,
-                        notes,
-                        calculated,
-                    )
-                    self.__locations.append(location)
+        await self._make_request(force)
 
-                return self.__locations
+        return self._locations_json
+
+    async def get_active(self, force: bool = False):
+        if (time() - self._timer) > 60:
+            self._timer = time()
+            self._requests_per_minute = 0
+
+        if self._requests_per_minute == BaseAlertsClient.HARD_LIMIT:
+            return self._locations
+
+        if self._requests_per_minute >= self._requests_per_minute_limit and not force:
+            return self._locations
+
+        self._requests_per_minute += 1
+
+        await self._make_request(force)
+        self._make_locations()
+
+        return self._locations
