@@ -7,7 +7,8 @@ from alerts_in_ua.locations import Locations
 from alerts_in_ua.map_style import MapStyle
 
 from alerts_in_ua.exceptions import (
-    InvalidToken as InvalidToken,
+    NotAuthorized as NotAuthorized,
+    Forbidden as Forbidden,
     TooManyRequests as TooManyRequests,
     UnknownError as UnknownError
 )
@@ -19,7 +20,8 @@ __all__: tuple[str] = (
     "Location",
     "Locations",
     "MapStyle",
-    "InvalidToken",
+    "NotAuthorized",
+    "Forbidden",
     "TooManyRequests",
     "UnknownError"
 )
