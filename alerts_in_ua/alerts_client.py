@@ -57,7 +57,7 @@ class AlertsClient(BaseAlertsClient):
             self._requests_per_minute = 0
 
         if self._requests_per_minute == BaseAlertsClient.HARD_LIMIT:
-            return self._locations_json
+            return self._locations
 
         if self._requests_per_minute >= self._requests_per_minute_limit and not force:
             return self._locations
