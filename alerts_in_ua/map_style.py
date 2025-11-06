@@ -1,6 +1,7 @@
 class MapStyle:
     def __init__(self,
                  no_data: str = "#1a2636",
+                 partial_alert: str = "#5C2224",
                  air_raid: str = "#762b2d",
                  artillery_shelling: str = "#ff7b00",
                  urban_fights: str = "#4e3cb4",
@@ -26,6 +27,7 @@ class MapStyle:
         """
 
         self.no_data = no_data
+        self.partial_alert = partial_alert
         self.air_raid = air_raid
         self.artillery_shelling = artillery_shelling
         self.urban_fights = urban_fights
@@ -37,7 +39,7 @@ class MapStyle:
         self.dpi = dpi
 
     def __repr__(self):
-        return f"MapStyle(no_data: {self.no_data}, air_raid: {self.air_raid}, " \
+        return f"MapStyle(no_data: {self.no_data}, partial_alert: {self.partial_alert}, air_raid: {self.air_raid}, " \
                f"artillery_shelling: {self.artillery_shelling}, urban_fights: {self.urban_fights}, " \
                f"chemical: {self.chemical}, nuclear: {self.nuclear}, stroke_width: {self.stroke_width}, " \
                f"stroke_color: {self.stroke_color}, background_color: {self.background_color}, dpi: {self.dpi})"

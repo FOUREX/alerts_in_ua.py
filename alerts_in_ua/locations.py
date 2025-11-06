@@ -80,12 +80,44 @@ class Locations(list):
         ukraine_map_root.set("stroke", map_style.stroke_color)
         ukraine_map_root.set("stroke_width", map_style.stroke_width)
 
-        for children in ukraine_map_root:
-            location_uid = children.attrib["location_uid"]
+        # for children in ukraine_map_root:
+        #     location_uid = children.attrib["location_uid"]
 
-            if location_uid in self.location_uid:
+        #     if location_uid in self.location_uid:
+        #         location = self.get_location(location_uid)
+        #         children.set("fill", getattr(map_style, location.alert_type))
+        #     else:
+        #         children.set("fill", map_style.no_data)
+
+        # Подготовим множества для быстрых проверок:
+        # 1) Полные (областные) тревоги — по их UID мы красим как раньше
+        full_oblast_uids = {
+            loc.location_uid for loc in self if getattr(loc, "location_type", None) == "oblast"
+        }
+        # 2) Частичные тревоги — список названий областей, в которых горят районы/громады/города
+        partial_oblast_names = {
+            loc.location_oblast
+            for loc in self
+            if getattr(loc, "location_type", None) != "oblast" and loc.location_oblast
+        }
+
+        for children in ukraine_map_root:
+            location_uid = children.attrib.get("location_uid")
+
+            # попытка вытащить читаемое имя области из SVG (зависит от файла; делаем м'який фоллбек)
+            oblast_title = (
+                children.attrib.get("location_title")
+                or children.attrib.get("title")
+                or children.attrib.get("name")
+            )
+
+            if location_uid and location_uid in full_oblast_uids:
+                # красим как раньше по типу тревоги на уровне области
                 location = self.get_location(location_uid)
                 children.set("fill", getattr(map_style, location.alert_type))
+            elif oblast_title and oblast_title in partial_oblast_names:
+                # нет областного алерта, но есть раион/громада/город в тревоге — делаем область темнее
+                children.set("fill", map_style.partial_alert)
             else:
                 children.set("fill", map_style.no_data)
 
