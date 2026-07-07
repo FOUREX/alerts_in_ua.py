@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as file:
     long_description = file.read()
 
 requires = [
-    "aiohttp~=3.8.3",
+    "aiohttp>=3.8",
     "requests~=2.28.1",
     "svglib~=1.5.1",
     "reportlab~=3.6.12"
